@@ -1,1 +1,1 @@
-# gcn
+# Graph Convolutional Networks
