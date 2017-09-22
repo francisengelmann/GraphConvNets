@@ -5,7 +5,6 @@ import numpy as np
 def load_data_karate():
     G = nx.karate_club_graph()
 
-
     adj = nx.adjacency_matrix(G)
     adj = adj.todense()
 
@@ -53,6 +52,3 @@ def load_data_karate():
         2,
     ]
     return adj, feats, labels
-
-def load_data_3DSMR():
-    pass
