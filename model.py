@@ -7,8 +7,8 @@ def gcn_layer(H, adj_norm, output_dim, scope):
         W = tf.Variable(tf.random_uniform((Dsize, output_dim)))
         # W = tf.Print(W, [W], "W")
         Z = tf.matmul(tf.matmul(adj_norm, H), W)
-        # H_out = tf.nn.relu(Z)
-        H_out = tf.nn.sigmoid(Z)
+        H_out = tf.nn.relu(Z)
+        #H_out = tf.nn.sigmoid(Z)
 
     return H_out
 
@@ -20,7 +20,7 @@ def gcn(adj, deg):
     # return y
 
     num_nodes = adj.get_shape()[0].value  # number of nodes in the graph, number of points
-    num_classes = 2  # number of ground truth classes
+    num_classes = 4  # number of ground truth classes
 
     # inputs X , H(0)
     id = tf.eye(num_nodes)
@@ -35,12 +35,12 @@ def gcn(adj, deg):
     D = tf.where(tf.is_inf(D), tf.zeros_like(D), D)
     adj_norm = tf.matmul(D, tf.matmul(A, D))  # normalization of A
 
-    H_1 = gcn_layer(H_0, adj_norm, num_classes, "L1")
+    H_1 = gcn_layer(H_0, adj_norm, num_nodes, "L1")
     H_2 = gcn_layer(H_1, adj_norm, num_nodes//2, "L2")
     H_3 = gcn_layer(H_2, adj_norm, num_classes, "L3")
-    y = H_1
+    y = H_3
 
-    return y
+    return H_2, y
 
 def gcn_prev(adj, deg):
     num_nodes = adj.get_shape()[0].value  # number of nodes in the graph, number of points
